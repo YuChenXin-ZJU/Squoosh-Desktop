@@ -1,6 +1,6 @@
-# Squoosh Desktop（桌面版图片压缩工具）
+# squoosh-Desktop（桌面版图片压缩工具）
 
-Squoosh Desktop 是一个离线优先的图片压缩/转码桌面应用（Windows 可用），支持多种编码格式与参数调节，并提供压缩前后对比预览。
+squoosh-Desktop 是一个离线优先的图片压缩/转码桌面应用（Windows 可用），支持多种编码格式与参数调节，并提供压缩前后对比预览。
 
 本项目基于 Google 的开源项目 Squoosh（二次开发与桌面化封装），用于将 Squoosh 的核心能力以桌面应用形式交付。
 
