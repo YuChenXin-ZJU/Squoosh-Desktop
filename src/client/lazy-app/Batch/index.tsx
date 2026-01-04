@@ -40,7 +40,7 @@ interface State {
   items: BatchItem[];
   locale: Locale;
   encoderType: EncoderType;
-  compression?: number;
+  quality?: number;
   running: boolean;
 }
 
@@ -60,11 +60,11 @@ function clampNumber(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
 }
 
-function defaultCompressionForEncoder(encoderType: EncoderType) {
+function defaultQualityForEncoder(encoderType: EncoderType) {
   const encoder = encoderMap[encoderType];
   const options: any = encoder.meta.defaultOptions as any;
   if (typeof options.quality !== 'number') return undefined;
-  return clampNumber(100 - options.quality, 0, 99);
+  return clampNumber(options.quality, 1, 100);
 }
 
 function prettyBytes(bytes: number) {
@@ -117,7 +117,7 @@ export default class Batch extends Component<Props, State> {
     })),
     locale: getLocale(),
     encoderType: getDefaultEncoderType(),
-    compression: defaultCompressionForEncoder(getDefaultEncoderType()),
+    quality: defaultQualityForEncoder(getDefaultEncoderType()),
     running: false,
   };
 
@@ -163,10 +163,10 @@ export default class Batch extends Component<Props, State> {
     const encoder = encoderMap[this.state.encoderType];
     const options: any = cloneOptions(encoder.meta.defaultOptions as any);
     if (
-      typeof this.state.compression === 'number' &&
+      typeof this.state.quality === 'number' &&
       typeof options.quality === 'number'
     ) {
-      options.quality = clampNumber(100 - this.state.compression, 1, 100);
+      options.quality = clampNumber(this.state.quality, 1, 100);
     }
     return options;
   }
@@ -225,27 +225,19 @@ export default class Batch extends Component<Props, State> {
     const value = (event.target as HTMLSelectElement).value as EncoderType;
     this.setState({
       encoderType: value,
-      compression: defaultCompressionForEncoder(value),
+      quality: defaultQualityForEncoder(value),
     });
   };
 
-  private onCompressionChange = (event: Event) => {
+  private onQualityChange = (event: Event) => {
     const value = Number((event.target as HTMLInputElement).value);
-    this.setState({ compression: value });
+    this.setState({ quality: value });
   };
 
-  private shouldShowCompression() {
+  private shouldShowQuality() {
     const encoder = encoderMap[this.state.encoderType];
     const options: any = encoder.meta.defaultOptions as any;
     return typeof options.quality === 'number';
-  }
-
-  private derivedQuality() {
-    const encoder = encoderMap[this.state.encoderType];
-    const options: any = encoder.meta.defaultOptions as any;
-    if (typeof options.quality !== 'number') return undefined;
-    const compression = this.state.compression ?? defaultCompressionForEncoder(this.state.encoderType) ?? 0;
-    return clampNumber(100 - compression, 1, 100);
   }
 
   private downloadItem = (item: BatchItem) => {
@@ -353,27 +345,22 @@ export default class Batch extends Component<Props, State> {
                 ))}
               </select>
             </label>
-            {this.shouldShowCompression() && (
+            {this.shouldShowQuality() && (
               <label class={style.control}>
                 <span class={style.controlLabel}>
-                  {t(locale, { zh: '压缩强度', en: 'Compression' })}
+                  {t(locale, { zh: '质量', en: 'Quality' })}
                 </span>
                 <input
                   class={style.range}
                   type="range"
-                  min="0"
-                  max="99"
-                  value={this.state.compression ?? defaultCompressionForEncoder(encoderType) ?? 0}
-                  onInput={this.onCompressionChange}
+                  min="1"
+                  max="100"
+                  step="1"
+                  value={this.state.quality ?? defaultQualityForEncoder(encoderType) ?? 75}
+                  onInput={this.onQualityChange}
                 />
                 <span class={style.controlValue}>
-                  {this.state.compression ?? defaultCompressionForEncoder(encoderType) ?? 0}
-                  {this.derivedQuality() != null
-                    ? t(locale, {
-                        zh: `（质量 ${this.derivedQuality()}）`,
-                        en: ` (quality ${this.derivedQuality()})`,
-                      })
-                    : ''}
+                  {this.state.quality ?? defaultQualityForEncoder(encoderType) ?? 75}
                 </span>
               </label>
             )}
@@ -447,4 +434,3 @@ export default class Batch extends Component<Props, State> {
     );
   }
 }
-
