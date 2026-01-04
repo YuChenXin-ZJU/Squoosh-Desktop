@@ -50,12 +50,13 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
+          REPO="${GITHUB_REPOSITORY}"
           TAG="${GITHUB_REF_NAME}"
 
-          if gh release view "$TAG" >/dev/null 2>&1; then
+          if gh release view -R "$REPO" "$TAG" >/dev/null 2>&1; then
             echo "Release exists: $TAG"
           else
-            gh release create "$TAG" --title "$TAG" --notes "Automated desktop build."
+            gh release create -R "$REPO" "$TAG" --title "$TAG" --notes "Automated desktop build."
           fi
 
           mapfile -t ASSETS < <(
@@ -70,4 +71,4 @@ jobs:
             exit 1
           fi
 
-          gh release upload "$TAG" "${ASSETS[@]}" --clobber
+          gh release upload -R "$REPO" "$TAG" "${ASSETS[@]}" --clobber
