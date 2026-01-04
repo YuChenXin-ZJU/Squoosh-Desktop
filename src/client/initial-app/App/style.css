@@ -68,47 +68,86 @@
 }
 
 .home {
-  --home-fg: rgba(255, 255, 255, 0.92);
-  --home-card-bg: rgba(0, 0, 0, 0.5);
-  --home-card-border: rgba(255, 255, 255, 0.15);
-  --home-button-bg: rgba(255, 255, 255, 0.08);
-  --home-button-border: rgba(255, 255, 255, 0.2);
-  --home-button-fg: #fff;
-  --home-muted: rgba(255, 255, 255, 0.78);
+  --paper: #f8f7f2;
+  --ink: rgba(12, 12, 12, 0.94);
+  --muted: rgba(12, 12, 12, 0.62);
+  --hairline: rgba(12, 12, 12, 0.18);
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-border: rgba(12, 12, 12, 0.14);
+  --button-bg: transparent;
+  --button-fg: var(--ink);
+  --button-border: var(--hairline);
+  --button-bg-hover: rgba(12, 12, 12, 0.06);
 
   height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--home-fg);
+  background:
+    radial-gradient(900px 600px at 10% 10%, rgba(0, 0, 0, 0.04), transparent 60%),
+    radial-gradient(700px 500px at 90% 20%, rgba(0, 0, 0, 0.03), transparent 60%),
+    var(--paper);
+  color: var(--ink);
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   .home {
-    --home-fg: rgba(15, 18, 32, 0.92);
-    --home-card-bg: rgba(255, 255, 255, 0.72);
-    --home-card-border: rgba(15, 18, 32, 0.12);
-    --home-button-bg: rgba(15, 18, 32, 0.06);
-    --home-button-border: rgba(15, 18, 32, 0.14);
-    --home-button-fg: rgba(15, 18, 32, 0.92);
-    --home-muted: rgba(15, 18, 32, 0.7);
+    --paper: #0e0e0e;
+    --ink: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.64);
+    --hairline: rgba(255, 255, 255, 0.16);
+    --surface: rgba(20, 20, 20, 0.72);
+    --surface-border: rgba(255, 255, 255, 0.14);
+    --button-bg-hover: rgba(255, 255, 255, 0.08);
+
+    background:
+      radial-gradient(900px 600px at 10% 10%, rgba(255, 255, 255, 0.06), transparent 60%),
+      radial-gradient(700px 500px at 90% 20%, rgba(255, 255, 255, 0.04), transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    color-scheme: dark;
   }
 }
 
-.home-card {
-  width: min(520px, calc(100% - 32px));
-  border: 1px solid var(--home-card-border);
-  border-radius: 16px;
-  padding: 18px;
-  background: var(--home-card-bg);
+.home-shell {
+  width: min(680px, calc(100% - 48px));
+  padding: 22px 22px 18px;
+  border: 1px solid var(--surface-border);
+  border-radius: 18px;
+  background: var(--surface);
   backdrop-filter: blur(10px);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+}
+
+.home-header {
+  display: grid;
+  gap: 6px;
+}
+
+.home-kicker {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .home-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
+  font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  font-size: 30px;
+  font-weight: 650;
+  line-height: 1.1;
+}
+
+.home-deck {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.home-rule {
+  height: 1px;
+  background: var(--hairline);
+  margin: 14px 0 16px;
 }
 
 .home-actions {
@@ -119,15 +158,19 @@
 
 .home-button {
   appearance: none;
-  border: 1px solid var(--home-button-border);
-  background: var(--home-button-bg);
-  color: var(--home-button-fg);
-  padding: 10px 12px;
-  border-radius: 10px;
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
+  color: var(--button-fg);
+  padding: 10px 14px;
+  border-radius: 999px;
   cursor: pointer;
   font: inherit;
   transition: transform 120ms ease, background-color 160ms ease,
     border-color 160ms ease;
+}
+
+.home-button:hover {
+  background: var(--button-bg-hover);
 }
 
 .home-button:not(:disabled):active {
@@ -135,13 +178,13 @@
 }
 
 .home-button:focus-visible {
-  outline: 2px solid var(--pink);
+  outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
 
 .home-hint {
   margin-top: 10px;
-  color: var(--home-muted);
+  color: var(--muted);
   font-size: 12px;
 }
 

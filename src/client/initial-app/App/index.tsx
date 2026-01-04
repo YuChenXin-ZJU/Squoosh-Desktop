@@ -179,8 +179,13 @@ export default class App extends Component<Props, State> {
             Batch && <Batch files={batchFiles || []} onBack={back} />
           ) : (
             <div class={style.home}>
-              <div class={style.homeCard}>
-                <div class={style.homeTitle}>Squoosh-Desktop</div>
+              <div class={style.homeShell}>
+                <header class={style.homeHeader}>
+                  <div class={style.homeKicker}>IMAGE OPTIMIZER</div>
+                  <div class={style.homeTitle}>Squoosh-Desktop</div>
+                  <div class={style.homeDeck}>压缩、对比、批量导出</div>
+                </header>
+                <div class={style.homeRule} />
                 <div class={style.homeActions}>
                   <button
                     class={style.homeButton}

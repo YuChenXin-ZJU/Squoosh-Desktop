@@ -282,108 +282,119 @@ export default class Batch extends Component<Props, State> {
 
     return (
       <div class={style.page}>
-        <div class={style.topbar}>
-          <div class={style.title}>批量压缩</div>
-          <div class={style.actions}>
-            <button class={style.button} onClick={onBack} disabled={running}>
-              返回
-            </button>
-            <button class={style.button} onClick={this.reset} disabled={running}>
-              重置
-            </button>
-            <button
-              class={style.button}
-              onClick={this.downloadAllZip}
-              disabled={running || done === 0}
-            >
-              下载全部(zip)
-            </button>
-            {running ? (
-              <button class={style.button} onClick={this.abort}>
-                停止
+        <div class={style.shell}>
+          <div class={style.topbar}>
+            <div class={style.title}>批量压缩</div>
+            <div class={style.actions}>
+              <button class={style.button} onClick={onBack} disabled={running}>
+                返回
               </button>
+              <button class={style.button} onClick={this.reset} disabled={running}>
+                重置
+              </button>
+              <button
+                class={style.button}
+                onClick={this.downloadAllZip}
+                disabled={running || done === 0}
+              >
+                下载全部(zip)
+              </button>
+              {running ? (
+                <button class={style.button} onClick={this.abort}>
+                  停止
+                </button>
+              ) : (
+                <button
+                  class={`${style.button} ${style.buttonPrimary}`}
+                  onClick={this.run}
+                >
+                  开始
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div class={style.controls}>
+            <label class={style.control}>
+              <span class={style.controlLabel}>输出格式</span>
+              <select
+                class={style.select}
+                value={encoderType}
+                onChange={this.onEncoderChange}
+              >
+                {Object.entries(encoderMap).map(([type, encoder]) => (
+                  <option value={type}>{encoder.meta.label}</option>
+                ))}
+              </select>
+            </label>
+            {this.shouldShowCompression() && (
+              <label class={style.control}>
+                <span class={style.controlLabel}>压缩强度</span>
+                <input
+                  class={style.range}
+                  type="range"
+                  min="0"
+                  max="99"
+                  value={this.state.compression ?? defaultCompressionForEncoder(encoderType) ?? 0}
+                  onInput={this.onCompressionChange}
+                />
+                <span class={style.controlValue}>
+                  {this.state.compression ?? defaultCompressionForEncoder(encoderType) ?? 0}
+                  {this.derivedQuality() != null ? `（质量 ${this.derivedQuality()}）` : ''}
+                </span>
+              </label>
+            )}
+            <div class={`${style.meta} ${style.summary}`}>
+              总计 {total}，完成 {done}，失败 {error}
+            </div>
+          </div>
+
+          <div class={style.content}>
+            {items.length === 0 ? (
+              <div class={style.empty}>拖拽多张图片到首页后进入这里</div>
             ) : (
-              <button class={`${style.button} ${style.buttonPrimary}`} onClick={this.run}>
-                开始
-              </button>
+              <div class={style.list}>
+                {items.map((item) => (
+                  <div class={style.item} key={item.id}>
+                    <div class={style.row}>
+                      <div>{item.file.name}</div>
+                      <div class={style.status}>
+                        {item.status === 'pending'
+                          ? '待处理'
+                          : item.status === 'processing'
+                            ? '处理中'
+                            : item.status === 'done'
+                              ? '完成'
+                              : '失败'}
+                      </div>
+                    </div>
+                    <div class={style.row}>
+                      <div class={style.meta}>
+                        原始 {prettyBytes(item.file.size)}
+                        {item.outputFile ? ` → 输出 ${prettyBytes(item.outputFile.size)}` : ''}
+                      </div>
+                      <div>
+                        <button
+                          class={style.button}
+                          onClick={() => this.downloadItem(item)}
+                          disabled={!item.outputFile}
+                        >
+                          下载
+                        </button>
+                      </div>
+                    </div>
+                    <div class={style.progress}>
+                      <div
+                        class={style.progressBar}
+                        style={{ width: `${Math.round(item.progress * 100)}%` }}
+                      />
+                    </div>
+                    {item.error && <div class={style.meta}>{item.error}</div>}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
-        </div>
-
-        <div class={style.controls}>
-          <label>
-            输出格式{' '}
-            <select class={style.select} value={encoderType} onChange={this.onEncoderChange}>
-              {Object.entries(encoderMap).map(([type, encoder]) => (
-                <option value={type}>{encoder.meta.label}</option>
-              ))}
-            </select>
-          </label>
-          {this.shouldShowCompression() && (
-            <label>
-              压缩强度{' '}
-              <input
-                class={style.range}
-                type="range"
-                min="0"
-                max="99"
-                value={this.state.compression ?? defaultCompressionForEncoder(encoderType) ?? 0}
-                onInput={this.onCompressionChange}
-              />{' '}
-              {this.state.compression ?? defaultCompressionForEncoder(encoderType) ?? 0}
-              {this.derivedQuality() != null ? `（质量 ${this.derivedQuality()}）` : ''}
-            </label>
-          )}
-          <div class={style.meta}>
-            总计 {total}，完成 {done}，失败 {error}
-          </div>
-        </div>
-
-        <div class={style.content}>
-          {items.length === 0 ? (
-            <div class={style.empty}>拖拽多张图片到首页后进入这里</div>
-          ) : (
-            <div class={style.list}>
-              {items.map((item) => (
-                <div class={style.item} key={item.id}>
-                  <div class={style.row}>
-                    <div>{item.file.name}</div>
-                    <div class={style.status}>
-                      {item.status === 'pending'
-                        ? '待处理'
-                        : item.status === 'processing'
-                          ? '处理中'
-                          : item.status === 'done'
-                            ? '完成'
-                            : '失败'}
-                    </div>
-                  </div>
-                  <div class={style.row}>
-                    <div class={style.meta}>
-                      原始 {prettyBytes(item.file.size)}
-                      {item.outputFile ? ` → 输出 ${prettyBytes(item.outputFile.size)}` : ''}
-                    </div>
-                    <div>
-                      <button
-                        class={style.button}
-                        onClick={() => this.downloadItem(item)}
-                        disabled={!item.outputFile}
-                      >
-                        下载
-                      </button>
-                    </div>
-                  </div>
-                  <div class={style.progress}>
-                    <div
-                      class={style.progressBar}
-                      style={{ width: `${Math.round(item.progress * 100)}%` }}
-                    />
-                  </div>
-                  {item.error && <div class={style.meta}>{item.error}</div>}
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     );

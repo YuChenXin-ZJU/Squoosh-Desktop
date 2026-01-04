@@ -1,41 +1,76 @@
 .page {
-  --page-bg: #0f1115;
-  --page-fg: rgba(255, 255, 255, 0.92);
-  --panel-border: rgba(255, 255, 255, 0.12);
-  --control-bg: rgba(255, 255, 255, 0.08);
-  --control-border: rgba(255, 255, 255, 0.2);
-  --control-fg: var(--page-fg);
-  --muted-fg: rgba(255, 255, 255, 0.75);
-  --item-bg: rgba(255, 255, 255, 0.04);
-  --option-bg: #0f1115;
-  --option-fg: rgba(255, 255, 255, 0.92);
-  --progress-track: rgba(255, 255, 255, 0.14);
-  --progress-bar: rgba(255, 255, 255, 0.6);
+  --paper: #f8f7f2;
+  --ink: rgba(12, 12, 12, 0.94);
+  --muted: rgba(12, 12, 12, 0.62);
+  --hairline: rgba(12, 12, 12, 0.18);
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-border: rgba(12, 12, 12, 0.14);
+  --card: rgba(255, 255, 255, 0.92);
+  --card-border: rgba(12, 12, 12, 0.14);
+  --control-bg: rgba(255, 255, 255, 0.76);
+  --control-border: rgba(12, 12, 12, 0.18);
+  --control-fg: var(--ink);
+  --button-bg-hover: rgba(12, 12, 12, 0.06);
+  --button-border: var(--hairline);
+  --option-bg: #fff;
+  --option-fg: rgba(12, 12, 12, 0.94);
+  --progress-track: rgba(12, 12, 12, 0.12);
+  --progress-bar: rgba(12, 12, 12, 0.35);
 
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(1200px 800px at 20% 0%, rgba(255, 51, 133, 0.18), transparent 55%),
-    radial-gradient(900px 700px at 90% 15%, rgba(95, 180, 228, 0.16), transparent 60%),
-    var(--page-bg);
-  color: var(--page-fg);
+  padding: 18px 16px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(900px 600px at 10% 10%, rgba(0, 0, 0, 0.04), transparent 60%),
+    radial-gradient(700px 500px at 90% 20%, rgba(0, 0, 0, 0.03), transparent 60%),
+    var(--paper);
+  color: var(--ink);
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   .page {
-    --page-bg: #f7f7fb;
-    --page-fg: rgba(15, 18, 32, 0.92);
-    --panel-border: rgba(15, 18, 32, 0.12);
-    --control-bg: rgba(15, 18, 32, 0.06);
-    --control-border: rgba(15, 18, 32, 0.14);
-    --muted-fg: rgba(15, 18, 32, 0.72);
-    --item-bg: rgba(255, 255, 255, 0.7);
-    --option-bg: #fff;
-    --option-fg: rgba(15, 18, 32, 0.92);
-    --progress-track: rgba(15, 18, 32, 0.12);
-    --progress-bar: rgba(15, 18, 32, 0.35);
+    --paper: #0e0e0e;
+    --ink: rgba(255, 255, 255, 0.92);
+    --muted: rgba(255, 255, 255, 0.64);
+    --hairline: rgba(255, 255, 255, 0.16);
+    --surface: rgba(20, 20, 20, 0.72);
+    --surface-border: rgba(255, 255, 255, 0.14);
+    --card: rgba(20, 20, 20, 0.92);
+    --card-border: rgba(255, 255, 255, 0.14);
+    --control-bg: rgba(20, 20, 20, 0.72);
+    --control-border: rgba(255, 255, 255, 0.18);
+    --control-fg: var(--ink);
+    --button-bg-hover: rgba(255, 255, 255, 0.08);
+    --option-bg: #0e0e0e;
+    --option-fg: rgba(255, 255, 255, 0.92);
+    --progress-track: rgba(255, 255, 255, 0.12);
+    --progress-bar: rgba(255, 255, 255, 0.42);
+
+    background:
+      radial-gradient(900px 600px at 10% 10%, rgba(255, 255, 255, 0.06), transparent 60%),
+      radial-gradient(700px 500px at 90% 20%, rgba(255, 255, 255, 0.04), transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    color-scheme: dark;
   }
+}
+
+.shell {
+  width: min(980px, 100%);
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--surface-border);
+  border-radius: 18px;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .topbar {
@@ -43,13 +78,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  border-bottom: 1px solid var(--panel-border);
+  border-bottom: 1px solid var(--hairline);
   backdrop-filter: blur(10px);
 }
 
 .title {
-  font-size: 16px;
-  font-weight: 600;
+  font-family: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  font-size: 18px;
+  font-weight: 650;
 }
 
 .actions {
@@ -60,20 +96,24 @@
 
 .button {
   appearance: none;
-  border: 1px solid var(--control-border);
-  background: var(--control-bg);
+  border: 1px solid var(--button-border, var(--control-border));
+  background: transparent;
   color: var(--control-fg);
-  padding: 8px 10px;
-  border-radius: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
   cursor: pointer;
   font: inherit;
   transition: transform 120ms ease, background-color 160ms ease, border-color 160ms ease;
 }
 
 .buttonPrimary {
-  border-color: rgba(255, 255, 255, 0.35);
-  background: var(--pink);
-  color: #fff;
+  border-color: var(--surface-border);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.button:hover:not(:disabled) {
+  background: var(--button-bg-hover);
 }
 
 .button:not(:disabled):active {
@@ -81,7 +121,7 @@
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--pink);
+  outline: 2px solid var(--ink);
   outline-offset: 2px;
 }
 
@@ -93,9 +133,28 @@
 .controls {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.control {
+  display: flex;
   align-items: center;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--panel-border);
+  gap: 10px;
+}
+
+.controlLabel {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.controlValue {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
 }
 
 .select,
@@ -103,9 +162,13 @@
   background: var(--control-bg);
   color: var(--control-fg);
   border: 1px solid var(--control-border);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 6px 8px;
   font: inherit;
+}
+
+.range {
+  width: 160px;
 }
 
 .select option {
@@ -113,8 +176,14 @@
   color: var(--option-fg);
 }
 
+.summary {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
 .content {
   flex: 1;
+  min-height: 0;
   overflow: auto;
   padding: 16px;
 }
@@ -124,7 +193,7 @@
   border-radius: 12px;
   padding: 24px;
   text-align: center;
-  color: var(--muted-fg);
+  color: var(--muted);
 }
 
 .list {
@@ -133,8 +202,8 @@
 }
 
 .item {
-  background: var(--item-bg);
-  border: 1px solid var(--panel-border);
+  background: var(--card);
+  border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 12px;
   display: grid;
@@ -144,13 +213,7 @@
 
 .item:hover {
   transform: translateY(-1px);
-  border-color: rgba(255, 255, 255, 0.18);
-}
-
-@media (prefers-color-scheme: light) {
-  .item:hover {
-    border-color: rgba(15, 18, 32, 0.18);
-  }
+  border-color: var(--control-border);
 }
 
 .row {
@@ -161,13 +224,13 @@
 }
 
 .meta {
-  color: var(--muted-fg);
+  color: var(--muted);
   font-size: 12px;
 }
 
 .status {
   font-size: 12px;
-  color: var(--muted-fg);
+  color: var(--muted);
 }
 
 .progress {
@@ -182,4 +245,3 @@
   background: var(--progress-bar);
   width: 0%;
 }
-
