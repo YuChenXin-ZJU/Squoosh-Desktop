@@ -58,7 +58,8 @@
     "appId": "app.squoosh.desktop",
     "productName": "Squoosh-Desktop",
     "directories": {
-      "output": "dist"
+      "output": "dist",
+      "buildResources": "electron/build-resources"
     },
     "files": [
       "electron/**/*",
@@ -72,12 +73,14 @@
     ],
     "win": {
       "signAndEditExecutable": false,
+      "icon": "electron/build-resources/icon.png",
       "target": [
         "nsis",
         "portable"
       ]
     },
     "mac": {
+      "icon": "electron/build-resources/icon.png",
       "target": [
         "dmg"
       ]

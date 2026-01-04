@@ -1,5 +1,5 @@
 const path = require('path');
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, nativeTheme } = require('electron');
 const { startStaticServer } = require('../lib/local-static-server');
 
 let mainWindow;
@@ -17,11 +17,14 @@ async function createMainWindow() {
   const started = await startStaticServer(staticRoot);
   server = started.server;
 
+  const iconPath = path.join(__dirname, 'build-resources', 'icon.png');
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     show: false,
     autoHideMenuBar: true,
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#0f1115' : '#f7f7fb',
+    icon: iconPath,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

@@ -11,6 +11,8 @@ dist-desktop-out
 dist-desktop-out-*
 release-desktop
 release-desktop-*
+release-Squoosh-Desktop
+release-Squoosh-Desktop-*
 *.o
 .DS_Store
 
