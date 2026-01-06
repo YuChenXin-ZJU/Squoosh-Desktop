@@ -63,9 +63,9 @@ jobs:
               ! -path '*/release-Squoosh-Desktop/*/win-unpacked/*' \
               ! -name 'elevate.exe' \
               \( \
-                -name '*Setup*.exe' -o \
+                -name '*.exe' -o \
                 -name '*.dmg' -o \
-                -name '*.AppImage' -o \
+                -name '*.rpm' -o \
                 -name '*.deb' \
               \)
           )

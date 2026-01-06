@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "Squoosh-Desktop",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "author": {
     "name": "YuChenXin-ZJU",
     "email": "YuChenXin-ZJU@users.noreply.github.com"
@@ -98,8 +98,8 @@
     "linux": {
       "icon": "electron/build-resources/icon.png",
       "target": [
-        "AppImage",
-        "deb"
+        "deb",
+        "rpm"
       ],
       "category": "Graphics"
     }

@@ -164,6 +164,11 @@
   background-size: 12px;
 }
 
+.lang-select option {
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
 .lang-select:hover {
   background: var(--button-bg-hover);
 }
