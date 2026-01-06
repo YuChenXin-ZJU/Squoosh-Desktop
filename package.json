@@ -2,6 +2,10 @@
   "private": true,
   "name": "Squoosh-Desktop",
   "version": "0.9.5",
+  "author": {
+    "name": "YuChenXin-ZJU",
+    "email": "YuChenXin-ZJU@users.noreply.github.com"
+  },
   "license": "apache-2.0",
   "main": "electron/main.js",
   "scripts": {
