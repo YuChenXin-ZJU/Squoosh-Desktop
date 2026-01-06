@@ -14,7 +14,6 @@ import {
   onLocaleChange,
   sniffMimeType,
   t,
-  toggleLocale,
 } from '../util';
 import { EncoderType, encoderMap } from '../feature-meta';
 import { zipSync, strToU8 } from 'fflate';
@@ -307,13 +306,6 @@ export default class Batch extends Component<Props, State> {
                 disabled={running || done === 0}
               >
                 {t(locale, { zh: '下载全部(zip)', en: 'Download all (zip)' })}
-              </button>
-              <button
-                class={style.button}
-                type="button"
-                onClick={() => this.setState({ locale: toggleLocale() })}
-              >
-                {locale === 'zh' ? '中文' : 'EN'}
               </button>
               {running ? (
                 <button class={style.button} onClick={this.abort}>

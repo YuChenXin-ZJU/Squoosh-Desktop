@@ -54,10 +54,9 @@ jobs:
           TAG="${GITHUB_REF_NAME}"
 
           if gh release view -R "$REPO" "$TAG" >/dev/null 2>&1; then
-            echo "Release exists: $TAG"
-          else
-            gh release create -R "$REPO" "$TAG" --title "$TAG" --notes "Automated desktop build."
+            gh release delete -R "$REPO" "$TAG" --yes
           fi
+          gh release create -R "$REPO" "$TAG" --title "$TAG" --notes "Automated desktop build."
 
           mapfile -t ASSETS < <(
             find dist -type f \
@@ -65,7 +64,9 @@ jobs:
               \( \
                 -name 'Squoosh-Desktop.Setup.*.exe' -o \
                 -name 'Squoosh-Desktop.*.exe' -o \
-                -name 'Squoosh-Desktop-*.dmg' \
+                -name 'Squoosh-Desktop-*.dmg' -o \
+                -name 'Squoosh-Desktop-*.AppImage' -o \
+                -name 'Squoosh-Desktop_*.deb' \
               \)
           )
 

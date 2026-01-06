@@ -17,7 +17,7 @@ export const isSafari =
   /Safari\//.test(navigator.userAgent) &&
   !/Chrom(e|ium)\//.test(navigator.userAgent);
 
-export type Locale = 'zh' | 'en';
+export type Locale = 'zh' | 'en' | 'ja';
 
 const LOCALE_STORAGE_KEY = 'squoosh-desktop-locale';
 const LOCALE_EVENT = 'squoosh-locale-change';
@@ -25,9 +25,12 @@ const LOCALE_EVENT = 'squoosh-locale-change';
 export function getLocale(): Locale {
   try {
     const stored = localStorage.getItem(LOCALE_STORAGE_KEY);
-    if (stored === 'zh' || stored === 'en') return stored;
+    if (stored === 'zh' || stored === 'en' || stored === 'ja') return stored;
   } catch {}
-  return /^zh\b/i.test(navigator.language || '') ? 'zh' : 'en';
+  const lang = navigator.language || '';
+  if (/^zh\b/i.test(lang)) return 'zh';
+  if (/^ja\b/i.test(lang)) return 'ja';
+  return 'en';
 }
 
 export function setLocale(locale: Locale) {
@@ -42,7 +45,12 @@ export function setLocale(locale: Locale) {
 }
 
 export function toggleLocale(): Locale {
-  const next: Locale = getLocale() === 'zh' ? 'en' : 'zh';
+  const current = getLocale();
+  let next: Locale = 'en';
+  if (current === 'en') next = 'zh';
+  else if (current === 'zh') next = 'ja';
+  else next = 'en';
+  
   setLocale(next);
   return next;
 }
@@ -51,15 +59,17 @@ export function onLocaleChange(handler: (locale: Locale) => void) {
   const listener = (event: Event) => {
     const e = event as CustomEvent<{ locale?: Locale }>;
     const locale = e.detail?.locale;
-    if (locale === 'zh' || locale === 'en') handler(locale);
+    if (locale === 'zh' || locale === 'en' || locale === 'ja') handler(locale);
   };
   window.addEventListener(LOCALE_EVENT, listener as EventListener);
   return () =>
     window.removeEventListener(LOCALE_EVENT, listener as EventListener);
 }
 
-export function t(locale: Locale, strings: { zh: string; en: string }) {
-  return locale === 'zh' ? strings.zh : strings.en;
+export function t(locale: Locale, strings: { zh: string; en: string; ja?: string }) {
+  if (locale === 'zh') return strings.zh;
+  if (locale === 'ja' && strings.ja) return strings.ja;
+  return strings.en;
 }
 
 /**

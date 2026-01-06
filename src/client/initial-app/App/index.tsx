@@ -5,7 +5,7 @@ import type { SnackOptions } from 'shared/custom-els/snack-bar';
 import { h, Component } from 'preact';
 
 import { linkRef } from 'shared/prerendered-app/util';
-import { getLocale, onLocaleChange, toggleLocale, t } from 'client/lazy-app/util';
+import { getLocale, onLocaleChange, toggleLocale, setLocale, t } from 'client/lazy-app/util';
 import type { Locale } from 'client/lazy-app/util';
 import * as style from './style.css';
 import 'add-css:./style.css';
@@ -208,14 +208,20 @@ export default class App extends Component<Props, State> {
                 <header class={style.homeHeader}>
                   <div class={style.homeTopRow}>
                     <div class={style.homeKicker}>IMAGE OPTIMIZER</div>
-                    <button
-                      class={style.langButton}
-                      type="button"
-                      onClick={() => this.setState({ locale: toggleLocale() })}
-                      aria-label={t(locale, { zh: '切换到英文', en: 'Switch to Chinese' })}
+                    <select
+                      class={style.langSelect}
+                      value={locale}
+                      onChange={(e) => {
+                        const val = (e.currentTarget as HTMLSelectElement).value as Locale;
+                        this.setState({ locale: val });
+                        setLocale(val);
+                      }}
+                      aria-label={t(locale, { zh: '切换语言', en: 'Switch language', ja: '言語を切り替え' })}
                     >
-                      {locale === 'zh' ? '中文' : 'EN'}
-                    </button>
+                      <option value="en">English</option>
+                      <option value="zh">中文</option>
+                      <option value="ja">日本語</option>
+                    </select>
                   </div>
                   <div class={style.homeTitle}>Squoosh-Desktop</div>
                   <div class={style.homeDeck}>
