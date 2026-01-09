@@ -63,11 +63,16 @@ jobs:
           set -euo pipefail
           REPO="${GITHUB_REPOSITORY}"
           TAG="${GITHUB_REF_NAME}"
+          NOTES_FILE="release-notes/${TAG}.md"
 
           if gh release view -R "$REPO" "$TAG" >/dev/null 2>&1; then
             gh release delete -R "$REPO" "$TAG" --yes
           fi
-          gh release create -R "$REPO" "$TAG" --title "$TAG" --notes "Automated desktop build."
+          if [ -f "$NOTES_FILE" ]; then
+            gh release create -R "$REPO" "$TAG" --title "$TAG" --notes-file "$NOTES_FILE"
+          else
+            gh release create -R "$REPO" "$TAG" --title "$TAG" --notes "Automated desktop build."
+          fi
 
           mapfile -t ASSETS < <(
             find dist -type f \
