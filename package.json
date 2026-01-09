@@ -1,24 +1,26 @@
 {
   "private": true,
   "name": "Squoosh-Desktop",
-  "version": "0.9.6",
+  "version": "0.9.9",
   "author": {
     "name": "YuChenXin-ZJU",
     "email": "YuChenXin-ZJU@users.noreply.github.com"
   },
   "license": "apache-2.0",
-  "main": "electron/main.js",
   "scripts": {
-    "build": "rollup -c && node lib/move-output.js",
+    "build": "rollup -c && node lib/move-output.js && node scripts/strip-icc.js build",
     "debug": "node --inspect-brk node_modules/.bin/rollup -c",
-    "dev": "DEV_PORT=\"${DEV_PORT:=5000}\" run-p watch serve",
+    "dev": "run-p watch serve",
     "watch": "rollup -cw",
-    "serve": "serve --listen=$DEV_PORT --config ../../../serve.json .tmp/build/static",
-    "desktop:dev": "npm run build && electron .",
-    "desktop:dist": "npm run build && electron-builder --config.directories.output=release-Squoosh-Desktop",
+    "serve": "node scripts/serve.js",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:portable": "node scripts/portable.js",
+    "tauri:dist": "tauri build && node scripts/portable.js",
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1.5.11",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.1.0",
     "@rollup/plugin-replace": "^2.3.4",
@@ -32,8 +34,6 @@
     "cssnano": "^4.1.10",
     "dedent": "^0.7.0",
     "del": "^5.1.0",
-    "electron": "^30.5.1",
-    "electron-builder": "^24.13.3",
     "fflate": "^0.8.2",
     "file-drop-element": "^1.0.1",
     "husky": "^7.0.2",
@@ -57,52 +57,6 @@
     "typescript": "^4.4.4",
     "wasm-feature-detect": "^1.2.11",
     "which": "^2.0.2"
-  },
-  "build": {
-    "appId": "app.squoosh.desktop",
-    "productName": "Squoosh-Desktop",
-    "compression": "maximum",
-    "electronLanguages": [
-      "en-US",
-      "zh-CN",
-      "ja"
-    ],
-    "directories": {
-      "output": "dist",
-      "buildResources": "electron/build-resources"
-    },
-    "files": [
-      "electron/**/*",
-      "lib/local-static-server.js"
-    ],
-    "extraResources": [
-      {
-        "from": "build",
-        "to": "build"
-      }
-    ],
-    "win": {
-      "signAndEditExecutable": false,
-      "icon": "electron/build-resources/icon.png",
-      "target": [
-        "nsis",
-        "portable"
-      ]
-    },
-    "mac": {
-      "icon": "electron/build-resources/icon.png",
-      "target": [
-        "dmg"
-      ]
-    },
-    "linux": {
-      "icon": "electron/build-resources/icon.png",
-      "target": [
-        "deb",
-        "rpm"
-      ],
-      "category": "Graphics"
-    }
   },
   "lint-staged": {
     "*.{js,css,json,md,ts,tsx}": "prettier --write",

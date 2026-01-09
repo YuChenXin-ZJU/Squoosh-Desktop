@@ -12,6 +12,7 @@ dist-desktop-out-*
 release-desktop
 release-desktop-*
 release-Squoosh-Desktop*
+src-tauri/target
 *.o
 .DS_Store
 

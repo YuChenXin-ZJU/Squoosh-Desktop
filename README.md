@@ -13,7 +13,7 @@ Squoosh-Desktop 是一个离线优先的图片压缩/转码桌面应用（Window
 从 Releases 下载最新版本：
 
 - Windows 安装版（NSIS）：`Squoosh-Desktop.Setup.*.exe`
-- Windows 免安装版（Portable）：`Squoosh-Desktop.*.exe`
+- Windows 免安装版（Portable）：`Squoosh-Desktop_*_portable.zip`
 - macOS（DMG）：`Squoosh-Desktop-*.dmg`
 - Linux：`Squoosh-Desktop-*.AppImage` / `Squoosh-Desktop_*.deb`
 
@@ -79,16 +79,16 @@ Squoosh-Desktop 是一个离线优先的图片压缩/转码桌面应用（Window
 
 ```sh
 npm install
-npm run desktop:dev
+npm run tauri:dev
 ```
 
 构建安装包/免安装包：
 
 ```sh
-npm run desktop:dist
+npm run tauri:dist
 ```
 
-构建完成后，产物位于 `release-Squoosh-Desktop/`。
+构建完成后，安装包位于 `src-tauri/target/release/bundle/`，免安装包位于 `release-Squoosh-Desktop/`。
 
 ### 开源声明与致谢
 
@@ -113,7 +113,7 @@ This project is based on Google’s open-source Squoosh (with desktop packaging 
 Get the latest build from Releases:
 
 - Windows (NSIS installer): `Squoosh-Desktop.Setup.*.exe`
-- Windows (Portable): `Squoosh-Desktop.*.exe`
+- Windows (Portable): `Squoosh-Desktop_*_portable.zip`
 - macOS (DMG): `Squoosh-Desktop-*.dmg`
 - Linux: `Squoosh-Desktop-*.AppImage` / `Squoosh-Desktop_*.deb`
 
@@ -178,13 +178,13 @@ Desktop development:
 
 ```sh
 npm install
-npm run desktop:dev
+npm run tauri:dev
 ```
 
 Build distributables:
 
 ```sh
-npm run desktop:dist
+npm run tauri:dist
 ```
 
-Outputs are placed under `release-Squoosh-Desktop/`.
+Installer outputs are placed under `src-tauri/target/release/bundle/`, and portable outputs are placed under `release-Squoosh-Desktop/`.

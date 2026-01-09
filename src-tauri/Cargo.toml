@@ -1,0 +1,17 @@
+[package]
+name = "squoosh-desktop"
+version = "0.9.9"
+description = "Squoosh-Desktop"
+authors = ["YuChenXin-ZJU"]
+license = "Apache-2.0"
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "1", features = [] }
+
+[dependencies]
+percent-encoding = "2"
+tauri = { version = "1", features = [] }
+
+[features]
+custom-protocol = ["tauri/custom-protocol"]

@@ -15,23 +15,28 @@ jobs:
       matrix:
         os: [windows-latest, macos-latest, ubuntu-latest]
     env:
-      ELECTRON_MIRROR: https://npmmirror.com/mirrors/electron/
-      ELECTRON_BUILDER_BINARIES_MIRROR: https://npmmirror.com/mirrors/electron-builder-binaries/
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RUST_BACKTRACE: 1
 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+      - uses: dtolnay/rust-toolchain@stable
+
+      - if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
 
       - run: npm ci
-      - run: npm run desktop:dist -- --publish=never
+      - run: npm run tauri:dist
 
       - uses: actions/upload-artifact@v4
         with:
           name: dist-${{ matrix.os }}
           path: |
+            src-tauri/target/release/bundle/**
             release-Squoosh-Desktop/**
 
   release:
@@ -60,13 +65,14 @@ jobs:
 
           mapfile -t ASSETS < <(
             find dist -type f \
-              ! -path '*/release-Squoosh-Desktop/*/win-unpacked/*' \
-              ! -name 'elevate.exe' \
               \( \
                 -name '*.exe' -o \
+                -name '*.msi' -o \
                 -name '*.dmg' -o \
+                -name '*.AppImage' -o \
+                -name '*.deb' -o \
                 -name '*.rpm' -o \
-                -name '*.deb' \
+                -name '*_portable.zip' \
               \)
           )
 

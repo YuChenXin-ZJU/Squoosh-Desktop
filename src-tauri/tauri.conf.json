@@ -1,0 +1,29 @@
+{
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devPath": "http://localhost:5000",
+    "distDir": "../build"
+  },
+  "package": {
+    "productName": "Squoosh-Desktop",
+    "version": "0.9.9"
+  },
+  "tauri": {
+    "bundle": {
+      "active": true,
+      "identifier": "app.squoosh.desktop",
+      "icon": ["icons/icon.png", "icons/icon.ico", "icons/icon.icns"],
+      "resources": ["../build"],
+      "targets": ["nsis", "dmg", "appimage", "deb", "rpm"],
+      "category": "Graphics and Design"
+    },
+    "allowlist": {
+      "all": false
+    },
+    "windows": [],
+    "security": {
+      "csp": null
+    }
+  }
+}
