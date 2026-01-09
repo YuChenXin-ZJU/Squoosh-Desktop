@@ -76,6 +76,7 @@ jobs:
 
           mapfile -t ASSETS < <(
             find dist -type f \
+              ! -path '*/release-Squoosh-Desktop/portable/*' \
               \( \
                 -name '*.exe' -o \
                 -name '*.msi' -o \
